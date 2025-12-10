@@ -1,1 +1,1 @@
-https://akhialomgir.github.io/site/about.html
+https://akhialomgir.github.io/site/index.html
