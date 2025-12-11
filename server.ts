@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync, writeFileSync, mkdirSync, existsSync } from "fs";
+import { readdirSync, readFileSync, writeFileSync, mkdirSync, existsSync, cpSync } from "fs";
 import { join } from "path";
 
 const compsDir = "./components";
@@ -24,5 +24,9 @@ for (const file of readdirSync(".")) {
     }
     writeFileSync(join(outDir, file), content);
   }
+}
+
+if (existsSync("./assets")) {
+  cpSync("./assets", join(outDir, "assets"), { recursive: true });
 }
 
