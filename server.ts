@@ -5,7 +5,7 @@ const compsDir = "./components";
 const srcDir = "./src"
 const outDir = "./dist";
 
-if (!existsSync(outDir)) mkdirSync(outDir);
+mkdirSync(outDir, { recursive: true });
 
 const comps: Record<string, string> = {};
 
@@ -17,17 +17,16 @@ function getComponents(currentDir = compsDir, baseDir = compsDir, prefix = '') {
     const fullpath = join(currentDir, item.name);
 
     if (item.isDirectory()) {
-      const nextPrefix = prefix ? `${prefix}-${item.name}` : item.name;
+      const nextPrefix = prefix + item.name + '-';
       getComponents(fullpath, baseDir, nextPrefix);
     } else if (item.isFile() && item.name.endsWith(".html")) {
-      const nameWithoutExt = item.name.replace(".html", "");
+      const nameWithoutExt = item.name.replace(/\.html$/, '');
       const componentName = prefix ? `${prefix}-${nameWithoutExt}` : nameWithoutExt;
       comps[componentName] = readFileSync(fullpath, "utf8").trim();
     }
   }
 }
 getComponents();
-console.log(comps)
 
 // embed comps
 function embedComponents(currentDir = srcDir, baseDir = srcDir, prefix = '') {
@@ -38,7 +37,7 @@ function embedComponents(currentDir = srcDir, baseDir = srcDir, prefix = '') {
 
 
     if (item.isDirectory()) {
-      const nextPrefix = prefix ? `${prefix}-${item.name}` : item.name;
+      const nextPrefix = prefix + item.name + '-';
       embedComponents(fullpath, baseDir, nextPrefix);
     } else if (item.isFile() && item.name.endsWith(".html")) {
       const relativePath = relative(baseDir, fullpath);
