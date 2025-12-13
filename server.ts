@@ -12,6 +12,17 @@ const comps: Record<string, [string, string]> = {};
 // inject meta
 function injectMeta(html: string): string {
   const metaContent = comps['Meta']?.[0] || '';
+
+  const headEnd = html.indexOf('</head>');
+  const headContent = html.substring(0, headEnd);
+
+  if (headContent.includes('<style')) {
+    const styleIndex = headContent.indexOf('<style');
+    return html.substring(0, styleIndex) +
+      metaContent + '\n' +
+      html.substring(styleIndex);
+  }
+
   return html.replace('</head>', metaContent + '\n</head>');
 }
 

@@ -3,51 +3,267 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
 <body>
   <Navbar />
 
-  <h1>土豆浓汤</h1>
-  <p>土豆浓汤是一种美味的汤品，主要材料是土豆。它的制作方法简单，口感顺滑，适合各种场合。</p>
-  <h2>材料</h2>
-  <ul>
-    <li>土豆：2个</li>
-    <li>洋葱：1个</li>
-    <li>大蒜：2瓣</li>
-    <li>牛奶：500毫升</li>
-    <li>黄油：30克</li>
-    <li>盐：适量</li>
-    <li>黑胡椒粉：适量</li>
-    <li>香菜：适量（可选）</li>
-  </ul>
-  <h2>步骤</h2>
-  <ol>
-    <li>将土豆去皮切块，洋葱和大蒜切碎。</li>
-    <li>在锅中加热黄油，放入洋葱和大蒜炒香。</li>
-    <li>加入土豆块，翻炒均匀。</li>
-    <li>倒入足够的水，煮沸后转小火，煮至土豆软烂。</li>
-    <li>用搅拌机将土豆混合物打成细腻的泥状。</li>
-    <li>将打好的土豆泥倒回锅中，加入牛奶，搅拌均匀。</li>
-    <li>继续加热，调入盐和黑胡椒粉，搅拌至汤品热透。</li>
-    <li>最后可以根据个人口味撒上香菜装饰。</li>
-  </ol>
-  <h2>待解决</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>如何不粘底？</th>
-        <th>如何解决表面发黄的问题？</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>后置牛奶与勾芡？</td>
-        <td>减少糊度？减少奶酪量？</td>
-      </tr>
-    </tbody>
-  </table>
+  <main class="recipe-container">
+    <header class="recipe-header">
+      <h1>土豆浓汤</h1>
+      <p>土豆浓汤是一种美味的汤品，主要材料是土豆。它的制作方法简单，口感顺滑，适合各种场合。</p>
+    </header>
+
+    <div class="recipe-content">
+      <section class="ingredients">
+        <h2>材料</h2>
+        <ul>
+          <li>土豆：2个</li>
+          <li>洋葱：1个</li>
+          <li>大蒜：2瓣</li>
+          <li>牛奶：500毫升</li>
+          <li>黄油：30克</li>
+          <li>盐：适量</li>
+          <li>黑胡椒粉：适量</li>
+          <li>香菜：适量（可选）</li>
+        </ul>
+      </section>
+
+      <section class="steps">
+        <h2>步骤</h2>
+        <ol>
+          <li>将土豆去皮切块，洋葱和大蒜切碎。</li>
+          <li>在锅中加热黄油，放入洋葱和大蒜炒香。</li>
+          <li>加入土豆块，翻炒均匀。</li>
+          <li>倒入足够的水，煮沸后转小火，煮至土豆软烂。</li>
+          <li>用搅拌机将土豆混合物打成细腻的泥状。</li>
+          <li>将打好的土豆泥倒回锅中，加入牛奶，搅拌均匀。</li>
+          <li>继续加热，调入盐和黑胡椒粉，搅拌至汤品热透。</li>
+          <li>最后可以根据个人口味撒上香菜装饰。</li>
+        </ol>
+      </section>
+
+      <section class="questions">
+        <h2>待解决</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>如何不粘底？</th>
+              <th>如何解决表面发黄的问题？</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>后置牛奶与勾芡？</td>
+              <td>减少糊度？减少奶酪量？</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </div>
+  </main>
+
+  <style>
+    .recipe-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      gap: 2rem;
+    }
+
+    .recipe-header {
+      text-align: center;
+      max-width: 800px;
+    }
+
+    .recipe-header h1 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      margin-bottom: 1rem;
+      color: #2c3e50;
+    }
+
+    .recipe-header p {
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      color: #7f8c8d;
+      line-height: 1.6;
+    }
+
+    .recipe-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      width: 100%;
+    }
+
+    .recipe-content>section {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    }
+
+    .recipe-content h2 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: #34495e;
+      border-bottom: 2px solid #3498db;
+      padding-bottom: 0.5rem;
+    }
+
+    .recipe-content>section:nth-child(1) ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .recipe-content>section:nth-child(1) li {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .recipe-content>section:nth-child(1) li:last-child {
+      border-bottom: none;
+    }
+
+    .recipe-content>section:nth-child(2) ol {
+      counter-reset: step-counter;
+      padding-left: 0;
+      list-style: none;
+    }
+
+    .recipe-content>section:nth-child(2) li {
+      counter-increment: step-counter;
+      padding: 0.8rem 0 0.8rem 2.5rem;
+      position: relative;
+      border-bottom: 1px dashed #eee;
+    }
+
+    .recipe-content>section:nth-child(2) li:before {
+      content: counter(step-counter);
+      position: absolute;
+      left: 0;
+      top: 0.8rem;
+      background: #3498db;
+      color: white;
+      width: 1.8rem;
+      height: 1.8rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      font-weight: bold;
+    }
+
+    .recipe-content>section:nth-child(3) table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+
+    .recipe-content>section:nth-child(3) th,
+    .recipe-content>section:nth-child(3) td {
+      padding: 0.8rem;
+      text-align: left;
+      border: 1px solid #ddd;
+    }
+
+    .recipe-content>section:nth-child(3) th {
+      background: #f8f9fa;
+      font-weight: 600;
+    }
+
+    .recipe-content>section:nth-child(3) tr:hover {
+      background: #f8f9fa;
+    }
+
+    @media (max-width: 768px) {
+      .recipe-container {
+        padding: 1rem;
+        gap: 1.5rem;
+      }
+
+      .recipe-content {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+
+      .recipe-content>section {
+        padding: 1rem;
+      }
+
+      .recipe-content h2 {
+        font-size: 1.3rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .recipe-content>section:nth-child(1) li {
+        flex-direction: column;
+        gap: 0.25rem;
+      }
+
+      .recipe-content>section:nth-child(2) li {
+        padding-left: 2rem;
+      }
+
+      .recipe-content>section:nth-child(2) li:before {
+        width: 1.5rem;
+        height: 1.5rem;
+        font-size: 0.8rem;
+      }
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .recipe-content>section {
+        background: #2d3436;
+        color: #dfe6e9;
+      }
+
+      .recipe-header h1 {
+        color: #dfe6e9;
+      }
+
+      .recipe-header p {
+        color: #b2bec3;
+      }
+
+      .recipe-content h2 {
+        color: #dfe6e9;
+        border-color: #0984e3;
+      }
+
+      .recipe-content>section:nth-child(1) li {
+        border-color: #444;
+      }
+
+      .recipe-content>section:nth-child(2) li {
+        border-color: #444;
+      }
+
+      .recipe-content>section:nth-child(2) li:before {
+        background: #0984e3;
+      }
+
+      .recipe-content>section:nth-child(3) th,
+      .recipe-content>section:nth-child(3) td {
+        border-color: #444;
+      }
+
+      .recipe-content>section:nth-child(3) th {
+        background: #3c3f41;
+      }
+
+      .recipe-content>section:nth-child(3) tr:hover {
+        background: #3c3f41;
+      }
+    }
+  </style>
 </body>
 
 </html>
