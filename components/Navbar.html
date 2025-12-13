@@ -1,9 +1,67 @@
-<header>
-  <nav>
-    <ul>
-      <li><a href="posts/1.html">发布</a></li>
-      <li><a href="gallery.html">图片</a></li>
-      <li><a href="about.html">关于</a></li>
-    </ul>
-  </nav>
-</header>
+<>
+  <header>
+    <nav>
+      <ul>
+        <li><a href="posts/1.html">发布</a></li>
+        <li><a href="gallery.html">图片</a></li>
+        <li><a href="about.html">关于</a></li>
+      </ul>
+    </nav>
+  </header>
+</>
+
+<style>
+  nav {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 1rem 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  nav ul {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    display: block;
+  }
+
+  nav a:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 768px) {
+    nav {
+      padding: 0.8rem 1rem;
+    }
+
+    nav ul {
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: space-around;
+    }
+
+    nav a {
+      padding: 0.4rem 0.8rem;
+      font-size: 0.9rem;
+    }
+  }
+
+  @media (prefers-color-scheme: dark) {
+    nav {
+      background: linear-gradient(135deg, #434343 0%, #1a1a1a 100%);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+  }
+</style>

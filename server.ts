@@ -7,7 +7,7 @@ const outDir = "./dist";
 
 mkdirSync(outDir, { recursive: true });
 
-const comps: Record<string, string> = {};
+const comps: Record<string, [string, string]> = {};
 
 // get comps
 function getComponents(currentDir = compsDir, baseDir = compsDir, prefix = '') {
@@ -22,11 +22,16 @@ function getComponents(currentDir = compsDir, baseDir = compsDir, prefix = '') {
     } else if (item.isFile() && item.name.endsWith(".html")) {
       const nameWithoutExt = item.name.replace(/\.html$/, '');
       const componentName = prefix ? `${prefix}-${nameWithoutExt}` : nameWithoutExt;
-      comps[componentName] = readFileSync(fullpath, "utf8").trim();
+      const content = readFileSync(fullpath, "utf8");
+      const htmlMatch = content.match(/^<>\s*\n([\s\S]*?)\n<\/>\s*/);
+      const styleMatch = content.match(/<style>([\s\S]*?)<\/style>/);
+      comps[componentName] = [
+        htmlMatch ? htmlMatch[1].trim() : '',
+        styleMatch ? styleMatch[1].trim() : ''
+      ];
     }
   }
 }
-getComponents();
 
 // embed comps
 function embedComponents(currentDir = srcDir, baseDir = srcDir, prefix = '') {
@@ -34,7 +39,6 @@ function embedComponents(currentDir = srcDir, baseDir = srcDir, prefix = '') {
 
   for (const item of items) {
     const fullpath = join(currentDir, item.name);
-
 
     if (item.isDirectory()) {
       const nextPrefix = prefix + item.name + '-';
@@ -49,14 +53,23 @@ function embedComponents(currentDir = srcDir, baseDir = srcDir, prefix = '') {
       }
 
       let content = readFileSync(fullpath, "utf8");
-      for (const name in comps) {
+
+      Object.keys(comps).forEach(name => {
         const tag = new RegExp(`<${name}\\s*/>`, "g");
-        content = content.replace(tag, comps[name]);
+        if (tag.test(content)) content = content.replace(tag, comps[name][0]);
+      });
+
+      const styles = Object.keys(comps).map(n => comps[n][1]).filter(Boolean).join('\n');
+      if (styles && content.includes('</head>')) {
+        content = content.replace('</head>', `<style>\n${styles}\n</style>\n</head>`);
       }
+
       writeFileSync(outputPath, content);
     }
   }
 }
+
+getComponents();
 embedComponents()
 
 if (existsSync("./assets")) {
