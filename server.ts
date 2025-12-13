@@ -9,6 +9,12 @@ mkdirSync(outDir, { recursive: true });
 
 const comps: Record<string, [string, string]> = {};
 
+// inject meta
+function injectMeta(html: string): string {
+  const metaContent = comps['Meta']?.[0] || '';
+  return html.replace('</head>', metaContent + '\n</head>');
+}
+
 // get comps
 function getComponents(currentDir = compsDir, baseDir = compsDir, prefix = '') {
   const items = readdirSync(currentDir, { withFileTypes: true });
@@ -58,6 +64,8 @@ function embedComponents(currentDir = srcDir, baseDir = srcDir, prefix = '') {
         const tag = new RegExp(`<${name}\\s*/>`, "g");
         if (tag.test(content)) content = content.replace(tag, comps[name][0]);
       });
+
+      content = injectMeta(content);
 
       const styles = Object.keys(comps).map(n => comps[n][1]).filter(Boolean).join('\n');
       if (styles && content.includes('</head>')) {
