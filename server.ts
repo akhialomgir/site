@@ -16,6 +16,16 @@ function injectMeta(html: string): string {
   return html.replace('</head>', metaContent + '\n</head>');
 }
 
+// turn relative paths to absolute paths
+function addHrefPrefix(html: string) {
+  return html.replace(/href="([^#][^"]*)"/g, (match, url: string) => {
+    if (url.startsWith('http') || url.startsWith('/') || url.startsWith('#')) {
+      return match;
+    }
+    return `href="/site/${url}"`
+  })
+}
+
 // get comps
 function getComponents(currentDir = compsDir, baseDir = compsDir, prefix = '') {
   const items = readdirSync(currentDir, { withFileTypes: true });
@@ -67,6 +77,7 @@ function embedComponents(currentDir = srcDir, baseDir = srcDir, prefix = '') {
       });
 
       content = injectMeta(content);
+      content = addHrefPrefix(content);
 
       const styles = Object.keys(comps).map(n => comps[n][1]).filter(Boolean).join('\n');
       if (styles && content.includes('</head>')) {
