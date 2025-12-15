@@ -40,8 +40,8 @@ function getComponents(currentDir = compsDir, baseDir = compsDir, prefix = '') {
       const nameWithoutExt = item.name.replace(/\.html$/, '');
       const componentName = prefix ? `${prefix}-${nameWithoutExt}` : nameWithoutExt;
       const content = readFileSync(fullpath, "utf8");
-      const htmlMatch = content.match(/^<>\s*\n([\s\S]*?)\n<\/>\s*/);
-      const styleMatch = content.match(/<style>([\s\S]*?)<\/style>/);
+      const htmlMatch = content.match(/^<>\s*\n(.*?)\n<\/>\s*/s);
+      const styleMatch = content.match(/<style>(.*?)<\/style>/s);
       comps[componentName] = [
         htmlMatch ? htmlMatch[1].trim() : '',
         styleMatch ? styleMatch[1].trim() : ''
