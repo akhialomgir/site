@@ -7,7 +7,8 @@ const outDir = "./dist";
 
 mkdirSync(outDir, { recursive: true });
 
-const comps: Record<string, [string, string]> = {};
+type ComponentsMap = Record<string, [string, string]>;
+const comps: ComponentsMap = {};
 
 // inject meta
 function injectMeta(html: string): string {
@@ -50,6 +51,29 @@ function getComponents(currentDir = compsDir, baseDir = compsDir, prefix = '') {
   }
 }
 
+function replaceComponentsRecursively(content: string, components: ComponentsMap, maxIterations = 99) {
+  let result = content;
+
+  for (let i = 0; i < maxIterations; i++) {
+    let changed = false;
+
+    for (const [name, [compContent]] of Object.entries(components)) {
+      const pattern = new RegExp(`<${name}\\s*/>`, 'g');
+      const newResult = result.replace(pattern, compContent);
+
+      if (newResult !== result) {
+        changed = true;
+        result = newResult;
+      }
+    }
+    if (!changed) break;
+
+    const hasRemainingTags = Object.keys(components).some(name => new RegExp(`<${name}\\s*/>`).test(result));
+    if (!hasRemainingTags) break;
+  }
+  return result;
+}
+
 // embed comps
 function embedComponents(currentDir = srcDir, baseDir = srcDir, prefix = '') {
   const items = readdirSync(currentDir, { withFileTypes: true });
@@ -71,10 +95,7 @@ function embedComponents(currentDir = srcDir, baseDir = srcDir, prefix = '') {
 
       let content = readFileSync(fullpath, "utf8");
 
-      Object.keys(comps).forEach(name => {
-        const tag = new RegExp(`<${name}\\s*/>`, "g");
-        if (tag.test(content)) content = content.replace(tag, comps[name][0]);
-      });
+      content = replaceComponentsRecursively(content, comps);
 
       content = injectMeta(content);
       content = addHrefPrefix(content);
