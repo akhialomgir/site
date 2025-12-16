@@ -51,6 +51,7 @@ function getComponents(currentDir = compsDir, baseDir = compsDir, prefix = '') {
   }
 }
 
+// recursive comps ref
 function replaceComponentsRecursively(content: string, components: ComponentsMap, maxIterations = 99) {
   let result = content;
 
