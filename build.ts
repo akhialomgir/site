@@ -39,7 +39,7 @@ function getComponents(currentDir = compsDir, baseDir = compsDir, prefix = '') {
       getComponents(fullpath, baseDir, nextPrefix);
     } else if (item.isFile() && item.name.endsWith(".html")) {
       const nameWithoutExt = item.name.replace(/\.html$/, '');
-      const componentName = prefix ? `${prefix}-${nameWithoutExt}` : nameWithoutExt;
+      const componentName = prefix + nameWithoutExt;
       const content = readFileSync(fullpath, "utf8");
       const htmlMatch = content.match(/^<>\s*\n(.*?)\n<\/>\s*/s);
       const styleMatch = content.match(/<style>(.*?)<\/style>/s);
