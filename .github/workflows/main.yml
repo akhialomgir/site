@@ -19,7 +19,7 @@ jobs:
       - run: npm install ts-node typescript
 
       - name: Run component injector
-        run: npx ts-node server.ts
+        run: npx ts-node build.ts
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
