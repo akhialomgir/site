@@ -1,5 +1,5 @@
 import { createServer } from 'http';
-import { watch, readFileSync, existsSync } from 'fs';
+import { watch, readFileSync, existsSync, statSync } from 'fs';
 import { extname, join } from 'path';
 import { exec } from 'child_process';
 
@@ -7,7 +7,7 @@ const PORT = 3000;
 const DIST_DIR = './dist';
 
 function build() {
-  exec('npx ts-node build.ts', (error, stdout, stderr) => {
+  exec('npx ts-node build.ts --dev', (error, stdout, stderr) => {
     if (error) {
       console.error('❌ 构建失败:', error.message);
       if (stderr) console.error('stderr:', stderr);
@@ -58,9 +58,13 @@ createServer((req, res) => {
   if (existsSync(filePath)) {
     try {
       const content = readFileSync(filePath);
+      // 🔥 关键：获取文件状态
+      const stats = statSync(filePath);
       res.writeHead(200, {
         'Content-Type': MIME_TYPES[ext] || 'text/plain',
-        'Cache-Control': 'no-cache'
+        'Cache-Control': 'no-cache',
+        'Last-Modified': stats.mtime.toUTCString(),  // 🎯 添加这个
+        'ETag': `W/"${stats.size}-${stats.mtime.getTime()}"`  // 🎯 添加这个
       });
       res.end(content);
     } catch (err) {

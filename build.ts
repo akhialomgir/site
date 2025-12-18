@@ -1,14 +1,30 @@
 import { readdirSync, readFileSync, writeFileSync, mkdirSync, existsSync, cpSync } from "fs";
 import { join, relative, dirname } from "path";
 
+const isDev = process.env.NODE_ENV === 'development' ||
+  process.argv.includes('--dev') ||
+  process.argv.includes('--development');
 const compsDir = "./components";
 const srcDir = "./src"
 const outDir = "./dist";
+
+const LIVE_RELOAD_SCRIPT = '<script src="https://kalabasa.github.io/simple-live-reload/script.js" data-debug></script>';
 
 mkdirSync(outDir, { recursive: true });
 
 type ComponentsMap = Record<string, [string, string]>;
 const comps: ComponentsMap = {};
+
+// dev reload
+function injectLiveReload(html: string): string {
+  if (!isDev) return html;
+
+  if (html.includes('</body>')) {
+    return html.replace('</body>', `${LIVE_RELOAD_SCRIPT}\n</body>`);
+  }
+
+  return html + LIVE_RELOAD_SCRIPT;
+}
 
 // inject meta
 function injectMeta(html: string): string {
@@ -100,6 +116,8 @@ function embedComponents(currentDir = srcDir, baseDir = srcDir, prefix = '') {
 
       content = injectMeta(content);
       content = addHrefPrefix(content);
+
+      content = injectLiveReload(content);
 
       const styles = Object.keys(comps).map(n => comps[n][1]).filter(Boolean).join('\n');
       if (styles && content.includes('</head>')) {
