@@ -20,6 +20,7 @@ function build() {
 
 function setupWatchers() {
   const dirsToWatch = ['./src', './components'];
+  let buildTimer: NodeJS.Timeout;
 
   dirsToWatch.forEach(dir => {
     if (!existsSync(dir)) {
@@ -28,10 +29,13 @@ function setupWatchers() {
     }
 
     watch(dir, { recursive: true }, (eventType, filename) => {
-      if (!filename) return;
+      if (!filename || filename.endsWith('~')) return;
 
       console.log(`📁 ${dir}/${filename} 已${eventType === 'change' ? '修改' : eventType}`);
-      build();
+      clearTimeout(buildTimer);
+      buildTimer = setTimeout(() => {
+        build();
+      }, 300);
     });
 
     console.log(`👀 开始监听: ${dir}`);
