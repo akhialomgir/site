@@ -7,6 +7,7 @@ const isDev = process.env.NODE_ENV === 'development' ||
 const compsDir = "./components";
 const srcDir = "./src"
 const outDir = "./dist";
+const githubPrefix = "/site";
 
 const LIVE_RELOAD_SCRIPT = '<script src="https://kalabasa.github.io/simple-live-reload/script.js" data-debug></script>';
 
@@ -33,14 +34,17 @@ function injectMeta(html: string): string {
   return html.replace('</head>', metaContent + '\n</head>');
 }
 
-// turn relative paths to absolute paths
+// for prod env
 function addHrefPrefix(html: string) {
-  return html.replace(/href="([^#][^"]*)"/g, (match, url: string) => {
-    if (url.startsWith('http') || url.startsWith('/') || url.startsWith('#')) {
+  // 🔥 只在生产环境（非开发）添加 /site/ 前缀
+  if (isDev) return html;
+
+  return html.replace(/href="\/([^#][^"]*)"/g, (match, url: string) => {
+    if (url.startsWith('http') || url.startsWith('#') || url.startsWith('data:')) {
       return match;
     }
-    return `href="/site/${url}"`
-  })
+    return `href="${githubPrefix}/${url}"`;
+  });
 }
 
 // get comps
