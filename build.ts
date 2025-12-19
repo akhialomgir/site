@@ -8,6 +8,7 @@ const compsDir = "./components";
 const srcDir = "./src"
 const outDir = "./dist";
 const githubPrefix = "/site";
+const globalCSSPath = "./src/index.css";
 
 const LIVE_RELOAD_SCRIPT = '<script src="https://kalabasa.github.io/simple-live-reload/script.js" data-debug></script>';
 
@@ -45,6 +46,14 @@ function addHrefPrefix(html: string) {
     }
     return `href="${githubPrefix}/${url}"`;
   });
+}
+
+// get global css style
+function getGlobalCSS(): string {
+  try {
+    if (existsSync(globalCSSPath)) return readFileSync(globalCSSPath, "utf-8").trim();
+  } catch { }
+  return '';
 }
 
 // get comps
@@ -123,9 +132,10 @@ function embedComponents(currentDir = srcDir, baseDir = srcDir, prefix = '') {
 
       content = injectLiveReload(content);
 
+      const globalStyle = getGlobalCSS();
       const styles = Object.keys(comps).map(n => comps[n][1]).filter(Boolean).join('\n');
       if (styles && content.includes('</head>')) {
-        content = content.replace('</head>', `<style>\n${styles}\n</style>\n</head>`);
+        content = content.replace('</head>', `<style>${globalStyle}\n${styles}</style></head>`);
       }
 
       writeFileSync(outputPath, content);
