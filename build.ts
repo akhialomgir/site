@@ -100,6 +100,16 @@ function replaceComponentsRecursively(content: string, components: ComponentsMap
 
     const hasRemainingTags = Object.keys(components).some(name => new RegExp(`<${name}\\s*/>`).test(result));
     if (!hasRemainingTags) break;
+
+    if (i === maxIterations - 1) {
+      const remainingComponents = Object.keys(components).filter(name =>
+        new RegExp(`<${name}\\s*/>`).test(result)
+      );
+      throw new Error(
+        `达到最大递归替换次数 (${maxIterations})。可能存在循环引用或无限递归。` +
+        `剩余未替换的组件: ${remainingComponents.join(', ')}`
+      );
+    }
   }
   return result;
 }
