@@ -10,7 +10,8 @@ const outDir = "./dist";
 const githubPrefix = "/site";
 const globalCSSPath = "./src/index.css";
 
-const LIVE_RELOAD_SCRIPT = '<script src="https://kalabasa.github.io/simple-live-reload/script.js" data-debug></script>';
+const LIVE_RELOAD_SCRIPT_PATH = './public/js/live-reload.js';
+const LIVE_RELOAD_SCRIPT = `<script>${readFileSync(LIVE_RELOAD_SCRIPT_PATH, 'utf-8')}</script>`;
 
 mkdirSync(outDir, { recursive: true });
 
@@ -157,3 +158,4 @@ if (existsSync("./assets")) {
   cpSync("./assets", join(outDir, "assets"), { recursive: true });
 }
 
+console.log(`✅ Build ${isDev ? '(dev)' : '(prod)'} completed.`);
