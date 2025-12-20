@@ -141,7 +141,7 @@ function embedComponents(currentDir = srcDir, baseDir = srcDir, prefix = '') {
 
       const globalStyle = getGlobalCSS();
       const styles = Object.keys(comps).map(n => comps[n][1]).filter(Boolean).join('\n');
-      if (styles && content.includes('</head>')) {
+      if ((styles || globalStyle) && content.includes('</head>')) {
         content = content.replace('</head>', `<style>${globalStyle}\n${styles}</style></head>`);
       }
 
