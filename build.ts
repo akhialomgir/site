@@ -35,11 +35,8 @@ function injectMeta(html: string): string {
   return html.replace('</head>', metaContent + '\n</head>');
 }
 
-// for prod env
+// add github prefix
 function addHrefPrefix(html: string) {
-  // 🔥 只在生产环境（非开发）添加 /site/ 前缀
-  if (isDev) return html;
-
   return html.replace(/href="\/([^#][^"]*)"/g, (match, url: string) => {
     if (url.startsWith('http') || url.startsWith('#') || url.startsWith('data:')) {
       return match;

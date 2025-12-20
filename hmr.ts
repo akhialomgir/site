@@ -5,14 +5,15 @@ import { exec } from 'child_process';
 
 const PORT = 3000;
 const DIST_DIR = './dist';
+const SITE_PREFIX = '/site';
 
 function build() {
   exec('npx ts-node build.ts --dev', (error, stdout, stderr) => {
     if (error) {
-      console.error('❌ 构建失败:', error.message);
+      console.error('❌ Build failed:', error.message);
       if (stderr) console.error('stderr:', stderr);
     } else {
-      console.log('✅ 构建完成');
+      console.log('✅ Build completed');
       if (stdout.trim()) console.log(stdout);
     }
   });
@@ -24,21 +25,21 @@ function setupWatchers() {
 
   dirsToWatch.forEach(dir => {
     if (!existsSync(dir)) {
-      console.warn(`⚠️  目录不存在: ${dir}`);
+      console.warn(`⚠️  Directory does not exist: ${dir}`);
       return;
     }
 
     watch(dir, { recursive: true }, (eventType, filename) => {
       if (!filename || filename.endsWith('~')) return;
 
-      console.log(`📁 ${dir}/${filename} 已${eventType === 'change' ? '修改' : eventType}`);
+      console.log(`📁 ${dir}/${filename} ${eventType === 'change' ? 'modified' : eventType}`);
       clearTimeout(buildTimer);
       buildTimer = setTimeout(() => {
         build();
       }, 300);
     });
 
-    console.log(`👀 开始监听: ${dir}`);
+    console.log(`👀 Start watching: ${dir}`);
   });
 }
 
@@ -52,35 +53,44 @@ const MIME_TYPES = {
 };
 
 createServer((req, res) => {
-  let filePath = join(DIST_DIR, req.url === '/' ? 'index.html' : req.url);
-  const ext = extname(filePath);
+  let requestPath = req.url === '/' ? '/index.html' : req.url;
 
-  if (!ext && existsSync(filePath + '.html')) {
-    filePath += '.html';
+  // remove github prefix
+  if (requestPath.startsWith(SITE_PREFIX)) {
+    requestPath = requestPath.substring(SITE_PREFIX.length);
+    if (requestPath === '') {
+      requestPath = '/index.html';
+    }
   }
+
+  // map to file path
+  const filePath = join(DIST_DIR, requestPath);
+
+  console.log(`req: ${req.url} → ${filePath}`); // debug log
+
+  const ext = extname(filePath);
 
   if (existsSync(filePath)) {
     try {
       const content = readFileSync(filePath);
-      // 🔥 关键：获取文件状态
       const stats = statSync(filePath);
       res.writeHead(200, {
         'Content-Type': MIME_TYPES[ext] || 'text/plain',
         'Cache-Control': 'no-cache',
-        'Last-Modified': stats.mtime.toUTCString(),  // 🎯 添加这个
-        'ETag': `W/"${stats.size}-${stats.mtime.getTime()}"`  // 🎯 添加这个
+        'Last-Modified': stats.mtime.toUTCString(),
+        'ETag': `W/"${stats.size}-${stats.mtime.getTime()}"`
       });
       res.end(content);
     } catch (err) {
       res.writeHead(500);
-      res.end('服务器错误');
+      res.end('Server Error');
     }
   } else {
     res.writeHead(404);
-    res.end('文件未找到');
+    res.end('File Not Found');
   }
 }).listen(PORT, () => {
-  console.log(`🚀 开发服务器运行在 http://localhost:${PORT}`);
+  console.log(`🚀 dev server: http://localhost:${PORT}${SITE_PREFIX}`);
   setupWatchers();
   build();
 });
