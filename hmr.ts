@@ -7,21 +7,28 @@ const PORT = 3000;
 const DIST_DIR = './dist';
 const SITE_PREFIX = '/site';
 
+let isBuilding = false;
+let pendingBuild = false;
+
 function build() {
+  isBuilding = true;
   exec('npx ts-node build.ts --dev', (error, stdout, stderr) => {
+    isBuilding = false;
     if (error) {
       console.error('❌ Build failed:', error.message);
       if (stderr) console.error('stderr:', stderr);
     } else {
-      console.log('✅ Build completed');
       if (stdout.trim()) console.log(stdout);
+    }
+    if (pendingBuild) {
+      pendingBuild = false;
+      build();
     }
   });
 }
 
 function setupWatchers() {
   const dirsToWatch = ['./src', './components'];
-  let buildTimer: NodeJS.Timeout;
 
   dirsToWatch.forEach(dir => {
     if (!existsSync(dir)) {
@@ -33,10 +40,8 @@ function setupWatchers() {
       if (!filename || filename.endsWith('~')) return;
 
       console.log(`📁 ${dir}/${filename} ${eventType === 'change' ? 'modified' : eventType}`);
-      clearTimeout(buildTimer);
-      buildTimer = setTimeout(() => {
-        build();
-      }, 300);
+      if (!isBuilding) build();
+      else pendingBuild = true;
     });
 
     console.log(`👀 Start watching: ${dir}`);
