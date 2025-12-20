@@ -58,7 +58,7 @@ const MIME_TYPES = {
 };
 
 createServer((req, res) => {
-  let requestPath = req.url === '/' ? '/index.html' : req.url;
+  let requestPath = req.url.endsWith('/') ? '/index.html' : req.url;
 
   // remove github prefix
   if (requestPath.startsWith(SITE_PREFIX)) {
@@ -75,24 +75,19 @@ createServer((req, res) => {
 
   const ext = extname(filePath);
 
-  if (existsSync(filePath)) {
-    try {
-      const content = readFileSync(filePath);
-      const stats = statSync(filePath);
-      res.writeHead(200, {
-        'Content-Type': MIME_TYPES[ext] || 'text/plain',
-        'Cache-Control': 'no-cache',
-        'Last-Modified': stats.mtime.toUTCString(),
-        'ETag': `W/"${stats.size}-${stats.mtime.getTime()}"`
-      });
-      res.end(content);
-    } catch (err) {
-      res.writeHead(500);
-      res.end('Server Error');
-    }
-  } else {
-    res.writeHead(404);
-    res.end('File Not Found');
+  try {
+    const content = readFileSync(filePath);
+    const stats = statSync(filePath);
+    res.writeHead(200, {
+      'Content-Type': MIME_TYPES[ext] || 'text/plain',
+      'Cache-Control': 'no-cache',
+      'Last-Modified': stats.mtime.toUTCString(),
+      'ETag': `W/"${stats.size}-${stats.mtime.getTime()}"`
+    });
+    res.end(content);
+  } catch (err) {
+    res.writeHead(500);
+    res.end('Server Error');
   }
 }).listen(PORT, () => {
   console.log(`🚀 dev server: http://localhost:${PORT}${SITE_PREFIX}`);
