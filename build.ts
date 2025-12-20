@@ -127,9 +127,7 @@ function embedComponents(currentDir = srcDir, baseDir = srcDir, prefix = '') {
       const outputPath = join(outDir, relativePath);
       const outputDir = dirname(outputPath);
 
-      if (!existsSync(outputDir)) {
-        mkdirSync(outputDir, { recursive: true });
-      }
+      mkdirSync(outputDir, { recursive: true });
 
       let content = readFileSync(fullpath, "utf8");
 
