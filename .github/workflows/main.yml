@@ -11,19 +11,20 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'  # 指定 Node 版本
-          cache: 'pnpm'       # 启用 pnpm 缓存
+          node-version: '20'
+          cache: 'pnpm'
       
-      - name: Install pnpm
-        run: npm install -g pnpm
-      
-      - run: pnpm install && pnpm build
+      - run: pnpm install
+      - run: pnpm build
       
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
@@ -36,7 +37,6 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
