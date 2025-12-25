@@ -1,24 +1,13 @@
 {
-    "compilerOptions": {
-        "target": "ES2020",
-        "module": "CommonJS",
-        "lib": [
-            "ES2020"
-        ],
-        "types": [
-            "node"
-        ],
-        "moduleResolution": "node",
-        "esModuleInterop": true,
-        "skipLibCheck": true,
-        "forceConsistentCasingInFileNames": true,
-        "outDir": "./dist"
-    },
-    "include": [
-        "./**/*"
-    ],
-    "exclude": [
-        "node_modules",
-        "dist"
-    ]
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "",
+    "module": "ESNext",
+    "target": "ES2020",
+    "strict": false,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "moduleResolution": "node"
+  },
+  "include": ["src/**/*"]
 }
