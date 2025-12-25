@@ -14,13 +14,17 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      
       - uses: actions/setup-node@v4
-
-      - run: pnpm i && pnpm build
-
-      - name: Run component injector
-        run: npx ts-node build.ts
-
+        with:
+          node-version: '20'  # 指定 Node 版本
+          cache: 'pnpm'       # 启用 pnpm 缓存
+      
+      - name: Install pnpm
+        run: npm install -g pnpm
+      
+      - run: pnpm install && pnpm build
+      
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
