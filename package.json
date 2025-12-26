@@ -1,7 +1,7 @@
 {
 	"type": "module",
 	"scripts": {
-		"build": "tsx build.ts"
+		"build": "node build.ts"
 	},
 	"dependencies": {
 		"@types/react": "^19.2.7",
@@ -9,7 +9,6 @@
 		"react": "^19.2.3"
 	},
 	"devDependencies": {
-		"@types/node": "^25.0.3",
-		"tsx": "^4.21.0"
+		"@types/node": "^25.0.3"
 	}
 }
