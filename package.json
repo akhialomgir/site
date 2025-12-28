@@ -4,6 +4,9 @@
 		"build": "node build.ts"
 	},
 	"dependencies": {
+		"@babel/generator": "^7.28.5",
+		"@babel/parser": "^7.28.5",
+		"@babel/traverse": "^7.28.5",
 		"@types/react": "^19.2.7",
 		"jsx-runtime": "^1.2.0",
 		"react": "^19.2.3"

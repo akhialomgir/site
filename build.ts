@@ -1,19 +1,23 @@
 import { readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { join, normalize } from 'path';
+import { getHtml } from './ast.ts';
 
 const ENTRY_FILE = 'src/index.tsx';
 const OUTPUT_DIR = 'dist';
 
-function build() {
+function getEntry(): string {
   const content = readFileSync(ENTRY_FILE, 'utf-8');
-  const html = content.match(/return\s*\(\s*<html>[\s\S]*<\/html>\s*\)/)?.[0]
-    ?.replace(/^return\s*\(\s*|\s*\)$/g, '') || '';
+  return getHtml(content) || "";
+}
+
+function build(): void {
+  const homeHtml = getEntry();
 
   const normalizedOutputDir = normalize(OUTPUT_DIR);
   mkdirSync(normalizedOutputDir, { recursive: true });
 
   const outputPath = join(normalizedOutputDir, 'index.html');
-  writeFileSync(outputPath, `<!DOCTYPE html>${html}`);
+  writeFileSync(outputPath, `<!DOCTYPE html>${homeHtml}`);
 }
 
 build();
