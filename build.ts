@@ -1,5 +1,7 @@
 import { readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { join, normalize } from 'path';
+import { fileURLToPath } from 'url';
+
 import { getHtml } from './ast.ts';
 
 const ENTRY_FILE = 'src/index.tsx';
@@ -10,7 +12,7 @@ function getEntry(): string {
   return getHtml(content) || "";
 }
 
-function build(): void {
+export function build(): void {
   const homeHtml = getEntry();
 
   const normalizedOutputDir = normalize(OUTPUT_DIR);
@@ -20,4 +22,6 @@ function build(): void {
   writeFileSync(outputPath, `<!DOCTYPE html>${homeHtml}`);
 }
 
-build();
+if (fileURLToPath(import.meta.url) === process.argv[1]) {
+  build();
+}

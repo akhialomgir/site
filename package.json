@@ -1,13 +1,15 @@
 {
 	"type": "module",
 	"scripts": {
-		"build": "node build.ts"
+		"build": "node build.ts",
+		"dev": "node hmr.ts"
 	},
 	"dependencies": {
 		"@babel/generator": "^7.28.5",
 		"@babel/parser": "^7.28.5",
 		"@babel/traverse": "^7.28.5",
 		"@types/react": "^19.2.7",
+		"chokidar": "^5.0.0",
 		"jsx-runtime": "^1.2.0",
 		"react": "^19.2.3"
 	},
