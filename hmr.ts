@@ -3,15 +3,15 @@ import { fileURLToPath } from 'url';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import chokidar from 'chokidar';
-import { WebSocketServer } from 'ws';
+import { WebSocketServer, WebSocket } from 'ws';
 
 import { build } from './build.ts';
 
 type FileEvent = 'add' | 'change' | 'unlink' | 'addDir' | 'unlinkDir';
 
-let wsClients: Set<any> = new Set();
+let wsClients: Set<WebSocket> = new Set();
 
-function broadcastHMR(message: Record<string, any>) {
+function broadcastHMR(message: Record<string, string>) {
   wsClients.forEach((client) => {
     if (client.readyState === 1) {
       client.send(JSON.stringify(message));
