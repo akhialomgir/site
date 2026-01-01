@@ -1,6 +1,7 @@
 import { parse } from '@babel/parser';
-import _traverse from '@babel/traverse';
+import _traverse, { NodePath } from '@babel/traverse';
 import { generate } from '@babel/generator';
+import { ReturnStatement } from '@babel/types';
 
 const traverse = (_traverse as any).default;
 
@@ -13,7 +14,7 @@ export function getHtml(tsxContent: string): string {
   let result = '';
 
   traverse(ast, {
-    ReturnStatement(path) {
+    ReturnStatement(path: NodePath<ReturnStatement>) {
       const { argument } = path.node;
       if (!argument) return;
 
