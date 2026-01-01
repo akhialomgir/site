@@ -12,7 +12,7 @@ function getEntry(): string {
   return getHtml(content) || "";
 }
 
-export function build(): void {
+export async function build(): Promise<void> {
   const homeHtml = getEntry();
 
   const normalizedOutputDir = normalize(OUTPUT_DIR);
@@ -23,5 +23,5 @@ export function build(): void {
 }
 
 if (fileURLToPath(import.meta.url) === process.argv[1]) {
-  build();
+  await build();
 }

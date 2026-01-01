@@ -7,7 +7,6 @@ import chokidar from 'chokidar';
 import { build } from './build.ts';
 
 type FileEvent = 'add' | 'change' | 'unlink' | 'addDir' | 'unlinkDir';
-type OnFileChange = (event: FileEvent, filePath: string) => void | Promise<void>;
 
 //TODO Create a websocket to refresh the browser on file changes
 
